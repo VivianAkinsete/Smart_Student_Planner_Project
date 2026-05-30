@@ -1,0 +1,237 @@
+# views/login_screen.kv
+# Login screen — mirrors the HTML design:
+# centred card, logo circle, username/password fields, error label, login button.
+
+<LoginScreen>:
+    canvas.before:
+        Color:
+            rgba: app.theme_bg
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    ScrollView:
+        do_scroll_x: False
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: dp(24)
+            spacing: dp(16)
+            size_hint_y: None
+            height: max(self.minimum_height, root.height)
+
+            # ── Vertical spacer to push card to centre ──
+            Widget:
+                size_hint_y: None
+                height: dp(40)
+
+            # ── Card container ──
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_x: 1
+                size_hint_y: None
+                height: self.minimum_height
+                padding: dp(32)
+                spacing: dp(20)
+                canvas.before:
+                    Color:
+                        rgba: app.theme_surface
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(16)]
+                    Color:
+                        rgba: app.theme_border
+                    Line:
+                        rounded_rectangle: [self.x, self.y, self.width, self.height, dp(16)]
+                        width: dp(0.8)
+
+                # ── Logo circle ──
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(80)
+                    orientation: "vertical"
+                    spacing: dp(4)
+
+                    AnchorLayout:
+                        size_hint_y: None
+                        height: dp(72)
+
+                        BoxLayout:
+                            size_hint: None, None
+                            size: dp(64), dp(64)
+                            canvas.before:
+                                Color:
+                                    rgba: app.theme_nav_active_bg
+                                Ellipse:
+                                    pos: self.pos
+                                    size: self.size
+
+                            Image:
+                                source: "Image/profile.jpg"
+                                size_hint: None, None
+                                size: dp(88), dp(88)
+                                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                                allow_stretch: True
+                                
+
+                # ── App title ──
+                Label:
+                    text: "Smart Planner"
+                    font_size: dp(28)
+                    bold: True
+                    color: app.theme_header_text
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(36)
+
+                Label:
+                    text: "Sign in to organise your academic life"
+                    font_size: dp(13)
+                    color: app.theme_text_muted
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(20)
+
+                # ── Error message (hidden by default) ──
+                BoxLayout:
+                    id: error_box
+                    size_hint_y: None
+                    height: dp(0)
+                    opacity: 0
+                    padding: dp(12)
+                    spacing: dp(8)
+                    canvas.before:
+                        Color:
+                            rgba: 1, 0.855, 0.839, 1   # error-container
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(8)]
+
+                    Label:
+                        id: error_label
+                        text: ""
+                        font_size: dp(13)
+                        color: 0.576, 0, 0.039, 1   # on-error-container
+                        text_size: self.width, None
+                        halign: "left"
+                        valign: "middle"
+
+                # ── Username field ──
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(6)
+
+                    Label:
+                        text: "USERNAME"
+                        font_size: dp(11)
+                        bold: True
+                        color: app.theme_text_muted
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        height: dp(16)
+
+                    TextInput:
+                        id: username_input
+                        hint_text: "Enter your student ID or username"
+                        hint_text_color: app.theme_text_muted
+                        font_size: dp(15)
+                        size_hint_y: None
+                        height: dp(48)
+                        padding: [dp(12), dp(12), dp(12), dp(12)]
+                        background_color: app.theme_input_bg
+                        foreground_color: app.theme_text
+                        cursor_color: app.theme_accent
+                        multiline: False
+                        on_text_validate: root.on_login()
+                        canvas.before:
+                            Color:
+                                rgba: app.theme_border
+                            Line:
+                                rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                width: dp(1)
+
+                # ── Password field ──
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(6)
+
+                    Label:
+                        text: "PASSWORD"
+                        font_size: dp(11)
+                        bold: True
+                        color: app.theme_text_muted
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        height: dp(16)
+
+                    TextInput:
+                        id: password_input
+                        hint_text: "••••••••"
+                        hint_text_color: app.theme_text_muted
+                        font_size: dp(15)
+                        password: True
+                        size_hint_y: None
+                        height: dp(48)
+                        padding: [dp(12), dp(12), dp(12), dp(12)]
+                        background_color: app.theme_input_bg
+                        foreground_color: app.theme_text
+                        cursor_color: app.theme_accent
+                        multiline: False
+                        on_text_validate: root.on_login()
+                        canvas.before:
+                            Color:
+                                rgba: app.theme_border
+                            Line:
+                                rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                width: dp(1)
+
+                # ── Login button ──
+                Button:
+                    text: "Login →"
+                    font_size: dp(16)
+                    bold: True
+                    size_hint_y: None
+                    height: dp(52)
+                    background_normal: ""
+                    background_color: 0, 0, 0, 0
+                    on_press: root.on_login()
+                    canvas.before:
+                        Color:
+                            rgba: app.theme_accent
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(10)]
+                    color: 1, 1, 1, 1
+
+                Button:
+                    text: "Create account"
+                    font_size: dp(14)
+                    bold: True
+                    size_hint_y: None
+                    height: dp(44)
+                    background_normal: ""
+                    background_color: app.theme_accent
+                    color: 1, 1, 1, 1
+                    on_press: root.go_to_signup()
+
+                # ── Hint ──
+                Label:
+                    text: "Hint: Vivian Akinsete / password123"
+                    font_size: dp(12)
+                    color: app.theme_text_muted
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(18)
+
+            Widget:
+                size_hint_y: None
+                height: dp(40)

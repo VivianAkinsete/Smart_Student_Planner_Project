@@ -1,0 +1,91 @@
+# views/task_card.kv
+# Shared TaskCard styling used by dashboard and tasks list.
+
+<TaskCard>:
+    size_hint_y: None
+    height: dp(90)
+    padding: dp(12)
+    spacing: dp(10)
+    canvas.before:
+        Color:
+            rgba: app.theme_surface
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(10)]
+        Color:
+            rgba: app.theme_border
+        Line:
+            rounded_rectangle: [self.x, self.y, self.width, self.height, dp(10)]
+            width: dp(0.8)
+
+    CheckBox:
+        id: task_checkbox
+        size_hint: None, None
+        size: dp(28), dp(28)
+        active: root.is_complete
+        color: app.theme_accent
+        on_active: root.on_toggle_complete(self.active)
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: dp(3)
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(24)
+            spacing: dp(8)
+
+            Label:
+                id: title_label
+                text: root.task_title
+                font_size: dp(14)
+                bold: True
+                color: app.theme_text
+                text_size: self.width, None
+                shorten: True
+                shorten_from: "right"
+                halign: "left"
+                valign: "center"
+
+            Label:
+                id: priority_badge
+                text: root.priority
+                font_size: dp(10)
+                bold: True
+                size_hint_x: None
+                width: dp(56)
+                halign: "center"
+                valign: "center"
+                color: root.priority_text_color
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(18)
+            spacing: dp(16)
+
+            Label:
+                text: "[font=mdi]\U000F0B67[/font] " + (root.due_date or "No date")
+                markup: True
+                font_size: dp(12)
+                color: app.theme_text_muted
+                halign: "left"
+                text_size: self.width, None
+
+            Label:
+                text: "[font=mdi]\U000F0B64[/font] " + (root.module_name or "No module")
+                markup: True
+                font_size: dp(12)
+                color: app.theme_text_muted
+                halign: "left"
+                text_size: self.width, None
+
+    Button:
+        size_hint: None, None
+        size: dp(36), dp(36)
+        background_normal: ""
+        background_color: 0, 0, 0, 0
+        text: "›"
+        font_size: dp(22)
+        color: app.theme_nav_inactive_text
+        on_press: root.on_tap()

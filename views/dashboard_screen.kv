@@ -1,0 +1,215 @@
+<DashboardScreen>:
+    canvas.before:
+        Color:
+            rgba: app.theme_bg
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+
+        # ── Top app bar ──
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: [dp(16), dp(8), dp(16), dp(8)]
+            spacing: dp(12)
+            canvas.before:
+                Color:
+                    rgba: app.theme_surface
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: app.theme_border
+                Line:
+                    points: [self.x, self.y, self.right, self.y]
+                    width: dp(0.8)
+
+            Image:
+                source: "Image/menu.png"
+                font_size: dp(20)
+                size_hint: None, None
+                size: dp(40), dp(44)
+                background_normal: ""
+                background_color: 0, 0, 0, 0
+                color: 0.267, 0.278, 0.298, 1
+
+
+            Label:
+                text: "Student Planner"
+                font_size: dp(18)
+                bold: True
+                color: app.theme_header_text
+                halign: "left"
+                text_size: self.width, None
+
+            Label:
+                id: user_greeting
+                text: ""
+                font_size: dp(12)
+                color: app.theme_text_muted
+                halign: "right"
+                text_size: self.width, None
+
+        #Welcome
+        BoxLayout:
+            size_hint_y: None
+            height: dp(90)
+            padding: [dp(16), dp(10), dp(16), dp(10)]
+            canvas.before:
+                Color:
+                    rgba: app.theme_surface
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            BoxLayout:
+                orientation: "vertical"
+                spacing: dp(4)
+
+                Label:
+                    id: welcome_label
+                    text: "Welcome, Student."
+                    font_size: dp(20)
+                    bold: True
+                    color: app.theme_header_text
+                    halign: "left"
+                    text_size: self.width, None
+
+                Label:
+                    id: tasks_due_label
+                    text: "You have tasks due today. Stay focused."
+                    font_size: dp(13)
+                    color: app.theme_text_muted
+                    halign: "left"
+                    text_size: self.width, None
+        ScrollView:
+            BoxLayout:
+                orientation: "vertical"
+                padding: [dp(16), dp(12), dp(16), dp(80)]
+                spacing: dp(16)
+                size_hint_y: None
+                height: self.minimum_height
+
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(28)
+
+                    Label:
+                        text: "Important Tasks"
+                        font_size: dp(15)
+                        bold: True
+                        color: app.theme_header_text
+                        halign: "left"
+                        text_size: self.width, None
+
+                    Label:
+                        id: important_count_label
+                        text: ""
+                        font_size: dp(12)
+                        color: app.theme_text_muted
+                        halign: "right"
+                        text_size: self.width, None
+
+                BoxLayout:
+                    id: important_list
+                    orientation: "vertical"
+                    spacing: dp(8)
+                    size_hint_y: None
+                    height: self.minimum_height
+
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(28)
+
+                    Label:
+                        text: "Upcoming Tasks"
+                        font_size: dp(15)
+                        bold: True
+                        color: app.theme_header_text
+                        halign: "left"
+                        text_size: self.width, None
+
+                    Label:
+                        id: upcoming_count_label
+                        text: ""
+                        font_size: dp(12)
+                        color: app.theme_text_muted
+                        halign: "right"
+                        text_size: self.width, None
+
+                BoxLayout:
+                    id: upcoming_list
+                    orientation: "vertical"
+                    spacing: dp(8)
+                    size_hint_y: None
+                    height: self.minimum_height
+
+        #Bottom nav bar
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            canvas.before:
+                Color:
+                    rgba: app.theme_surface
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: app.theme_border
+                Line:
+                    points: [self.x, self.top, self.right, self.top]
+                    width: dp(0.8)
+
+            Button:
+                text: "[font=mdi]\U000F056E[/font]\nDashboard"
+                markup: True
+                font_size: dp(10)
+                background_normal: ""
+                background_color: app.theme_nav_active_bg
+                color: app.theme_nav_active_text
+                on_press: pass   # already here
+
+            Button:
+                text: "[font=mdi]\U000F0279[/font]\nTasks"
+                markup: True
+                font_size: dp(10)
+                background_normal: ""
+                background_color: 0, 0, 0, 0
+                color: app.theme_nav_inactive_text
+                on_press: root.go_to_tasks()
+
+            Button:
+                text: "[font=mdi]\U000F0009[/font]\nProfile"
+                markup: True
+                font_size: dp(10)
+                background_normal: ""
+                background_color: 0, 0, 0, 0
+                color: app.theme_nav_inactive_text
+                on_press: root.go_to_profile()
+
+    #FAB
+    AnchorLayout:
+        anchor_x: "right"
+        anchor_y: "bottom"
+        padding: [0, 0, dp(20), dp(70)]
+
+        Button:
+            size_hint: None, None
+            size: dp(56), dp(56)
+            text: "+"
+            font_size: dp(28)
+            bold: True
+            background_normal: ""
+            background_color: 0, 0, 0, 0
+            color: app.theme_header_text
+            on_press: root.go_to_add_task()
+            canvas.before:
+                Color:
+                    rgba: app.theme_accent
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(16)]

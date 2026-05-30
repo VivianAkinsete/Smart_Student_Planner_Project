@@ -1,0 +1,299 @@
+# views/add_task_screen.kv
+# Add / Edit Task screen — mirrors the HTML "New Task" form.
+# Contains: header with close/title, scrollable form fields,
+# inline error labels, and a bottom Save button.
+
+<AddTaskScreen>:
+    canvas.before:
+        Color:
+            rgba: app.theme_bg
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+
+        # ── Header ──
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: [dp(12), dp(8), dp(12), dp(8)]
+            spacing: dp(8)
+            canvas.before:
+                Color:
+                    rgba: app.theme_surface
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: app.theme_border
+                Line:
+                    points: [self.x, self.y, self.right, self.y]
+                    width: dp(0.8)
+
+            Button:
+                text: "✕"
+                font_size: dp(18)
+                size_hint: None, None
+                size: dp(40), dp(40)
+                background_normal: ""
+                background_color: app.theme_bg
+                color: app.theme_text_muted
+                on_press: root.on_cancel()
+                canvas.before:
+                    Color:
+                        rgba: app.theme_bg
+                    Ellipse:
+                        pos: self.pos
+                        size: self.size
+
+            Label:
+                id: screen_title_label
+                text: "New Task"
+                font_size: dp(18)
+                bold: True
+                color: app.theme_header_text
+                halign: "center"
+
+            Widget:
+                size_hint_x: None
+                width: dp(40)
+
+        # ── Scrollable form ──
+        ScrollView:
+            do_scroll_x: False
+
+            BoxLayout:
+                orientation: "vertical"
+                padding: dp(20)
+                spacing: dp(16)
+                size_hint_y: None
+                height: self.minimum_height
+
+                # ── Title field ──
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(4)
+
+                    Label:
+                        text: "TITLE *"
+                        font_size: dp(11)
+                        bold: True
+                        color: app.theme_text
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        height: dp(16)
+
+                    TextInput:
+                        id: title_input
+                        hint_text: "e.g. Read Chapter 4"
+                        hint_text_color: app.theme_text_muted
+                        font_size: dp(15)
+                        size_hint_y: None
+                        height: dp(48)
+                        padding: [dp(12), dp(12), dp(12), dp(12)]
+                        background_color: app.theme_input_bg
+                        foreground_color: app.theme_text
+                        cursor_color: app.theme_accent
+                        multiline: False
+                        canvas.before:
+                            Color:
+                                rgba: app.theme_border
+                            Line:
+                                rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                width: dp(1)
+
+                    Label:
+                        id: title_error
+                        text: ""
+                        font_size: dp(12)
+                        color: 0.729, 0.102, 0.102, 1
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        height: dp(0)
+                        opacity: 0
+
+                # ── Module field ──
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(4)
+
+                    Label:
+                        text: "MODULE"
+                        font_size: dp(11)
+                        bold: True
+                        color: app.theme_text
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        height: dp(16)
+
+                    TextInput:
+                        id: module_input
+                        hint_text: "e.g. Computer Science 101"
+                        hint_text_color: app.theme_text_muted
+                        font_size: dp(15)
+                        size_hint_y: None
+                        height: dp(48)
+                        padding: [dp(12), dp(12), dp(12), dp(12)]
+                        background_color: app.theme_input_bg
+                        foreground_color: app.theme_text
+                        cursor_color: app.theme_accent
+                        multiline: False
+                        canvas.before:
+                            Color:
+                                rgba: app.theme_border
+                            Line:
+                                rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                width: dp(1)
+
+                # ── Due date field ──
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(4)
+
+                    Label:
+                        text: "DUE DATE (YYYY-MM-DD)"
+                        font_size: dp(11)
+                        bold: True
+                        color: app.theme_text
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        height: dp(16)
+
+                    TextInput:
+                        id: due_date_input
+                        hint_text: "e.g. 2024-12-25"
+                        hint_text_color: app.theme_text_muted
+                        font_size: dp(15)
+                        size_hint_y: None
+                        height: dp(48)
+                        padding: [dp(12), dp(12), dp(12), dp(12)]
+                        background_color: app.theme_input_bg
+                        foreground_color: app.theme_text
+                        cursor_color: app.theme_accent
+                        multiline: False
+                        canvas.before:
+                            Color:
+                                rgba: app.theme_border
+                            Line:
+                                rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                width: dp(1)
+
+                    Label:
+                        id: date_error
+                        text: ""
+                        font_size: dp(12)
+                        color: 0.729, 0.102, 0.102, 1
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        height: dp(0)
+                        opacity: 0
+
+                # ── Priority selector ──
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(8)
+
+                    Label:
+                        text: "PRIORITY"
+                        font_size: dp(11)
+                        bold: True
+                        color: app.theme_text
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        height: dp(16)
+
+                    BoxLayout:
+                        id: priority_selector
+                        size_hint_y: None
+                        height: dp(44)
+                        spacing: dp(8)
+
+                # ── Notes field ──
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(4)
+
+                    Label:
+                        text: "NOTES"
+                        font_size: dp(11)
+                        bold: True
+                        color: app.theme_text
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        height: dp(16)
+
+                    TextInput:
+                        id: notes_input
+                        hint_text: "Add any extra details or sub-tasks here..."
+                        hint_text_color: app.theme_text_muted
+                        font_size: dp(14)
+                        size_hint_y: None
+                        height: dp(100)
+                        padding: [dp(12), dp(12), dp(12), dp(12)]
+                        background_color: app.theme_input_bg
+                        foreground_color: app.theme_text
+                        cursor_color: app.theme_accent
+                        multiline: True
+                        canvas.before:
+                            Color:
+                                rgba: app.theme_border
+                            Line:
+                                rounded_rectangle: [self.x, self.y, self.width, self.height, dp(8)]
+                                width: dp(1)
+
+                # Spacer so last field isn't hidden by bottom button
+                Widget:
+                    size_hint_y: None
+                    height: dp(20)
+
+        # ── Bottom save button ──
+        BoxLayout:
+            size_hint_y: None
+            height: dp(72)
+            padding: [dp(20), dp(12), dp(20), dp(12)]
+            canvas.before:
+                Color:
+                    rgba: app.theme_surface
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: app.theme_border
+                Line:
+                    points: [self.x, self.top, self.right, self.top]
+                    width: dp(0.8)
+
+            Button:
+                text: "Save Task"
+                font_size: dp(16)
+                bold: True
+                background_normal: ""
+                background_color: 0, 0, 0, 0
+                color: app.theme_header_text
+                on_press: root.on_save()
+                canvas.before:
+                    Color:
+                        rgba: app.theme_accent
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(10)]

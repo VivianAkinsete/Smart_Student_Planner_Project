@@ -1,0 +1,314 @@
+# views/profile_screen.kv
+# Profile / Settings screen — mirrors the HTML profile page:
+# avatar card, preferences toggles, help/about rows, logout button.
+
+<ProfileScreen>:
+    canvas.before:
+        Color:
+            rgba: app.theme_bg
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+
+        # ── Top app bar ──
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: [dp(12), dp(8), dp(12), dp(8)]
+            spacing: dp(10)
+            canvas.before:
+                Color:
+                    rgba: app.theme_bg
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: app.theme_border
+                Line:
+                    points: [self.x, self.y, self.right, self.y]
+                    width: dp(0.8)
+
+            Image:
+                source: "Image/menu.png"
+                font_size: dp(20)
+                size_hint: None, None
+                size: dp(40), dp(44)
+                background_normal: ""
+                background_color: 0, 0, 0, 0
+                color: app.theme_text_muted
+
+            Label:
+                text: "Student Planner"
+                font_size: dp(18)
+                bold: True
+                color: app.theme_header_text
+                halign: "left"
+                text_size: self.width, None
+
+        # ── Scrollable body ──
+        ScrollView:
+            do_scroll_x: False
+
+            BoxLayout:
+                orientation: "vertical"
+                padding: dp(16)
+                spacing: dp(16)
+                size_hint_y: None
+                height: self.minimum_height
+
+                # ── Profile card ──
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: dp(180)
+                    padding: dp(16)
+                    spacing: dp(8)
+                    canvas.before:
+                        Color:
+                            rgba: app.theme_surface
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(14)]
+                        # green banner strip at top
+                        Color:
+                            rgba: app.theme_nav_active_bg
+                        RoundedRectangle:
+                            pos: self.x, self.top - dp(60)
+                            size: self.width, dp(60)
+                            radius: [dp(14), dp(14), 0, 0]
+
+                    AnchorLayout:
+                        anchor_x: "center"
+                        size_hint_y: None
+                        height: dp(80)
+
+                        BoxLayout:
+                            size_hint: None, None
+                            size: dp(72), dp(72)
+                            canvas.before:
+                                Color:
+                                    rgba: app.theme_accent
+                                Ellipse:
+                                    pos: self.pos
+                                    size: self.size
+
+                            Label:
+                                id: avatar_label
+                                text: "AM"
+                                font_size: dp(22)
+                                bold: True
+                                color: app.theme_nav_active_text
+                                halign: "center"
+
+                    Label:
+                        id: display_name_label
+                        text: "Alex Mercer"
+                        font_size: dp(18)
+                        bold: True
+                        color: app.theme_text
+                        halign: "center"
+                        size_hint_y: None
+                        height: dp(26)
+
+                    Label:
+                        id: username_label
+                        text: "student"
+                        font_size: dp(13)
+                        color: app.theme_text_muted
+                        halign: "center"
+                        size_hint_y: None
+                        height: dp(18)
+
+                # ── Preferences section ──
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    canvas.before:
+                        Color:
+                            rgba: app.theme_surface
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(12)]
+
+                    # Section header
+                    Label:
+                        text: "PREFERENCES"
+                        font_size: dp(11)
+                        bold: True
+                        color: app.theme_text_muted
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        height: dp(36)
+                        padding: [dp(16), dp(10)]
+
+                    # Notifications toggle row
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(52)
+                        padding: [dp(16), dp(8), dp(16), dp(8)]
+                        spacing: dp(12)
+                        canvas.before:
+                            Color:
+                                rgba: app.theme_border
+                            Line:
+                                points: [self.x + dp(16), self.top, self.right - dp(16), self.top]
+                                width: dp(0.5)
+
+                        Label:
+                            text: "🔔"
+                            font_size: dp(18)
+                            size_hint_x: None
+                            width: dp(28)
+
+                        Label:
+                            text: "Push Notifications"
+                            font_size: dp(15)
+                            color: app.theme_text
+                            halign: "left"
+                            text_size: self.width, None
+
+                        Switch:
+                            id: notif_switch
+                            active: True
+                            size_hint_x: None
+                            width: dp(60)
+                            on_active: root.on_toggle_notifications(self.active)
+
+                    # Dark mode row (visual only — placeholder)
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(52)
+                        padding: [dp(16), dp(8), dp(16), dp(8)]
+                        spacing: dp(12)
+
+                        Label:
+                            text: "🌙"
+                            font_size: dp(18)
+                            size_hint_x: None
+                            width: dp(28)
+
+                        Label:
+                            text: "Dark Mode"
+                            font_size: dp(15)
+                            color: app.theme_text
+                            halign: "left"
+                            text_size: self.width, None
+
+                        Switch:
+                            id: dark_switch
+                            active: False
+                            size_hint_x: None
+                            width: dp(60)
+                            on_active: root.on_toggle_theme(self.active)
+
+                # ── Help / About section ──
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    canvas.before:
+                        Color:
+                            rgba: app.theme_surface
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(12)]
+
+                    Button:
+                        text: "❓  Help & Support           ›"
+                        font_size: dp(14)
+                        halign: "left"
+                        size_hint_y: None
+                        height: dp(52)
+                        background_normal: ""
+                        background_color: 0, 0, 0, 0
+                        color: app.theme_text
+                        padding: [dp(16), 0]
+
+                    Button:
+                        text: "ℹ️  About App                ›"
+                        font_size: dp(14)
+                        halign: "left"
+                        size_hint_y: None
+                        height: dp(52)
+                        background_normal: ""
+                        background_color: 0, 0, 0, 0
+                        color: app.theme_text
+                        padding: [dp(16), 0]
+
+                # ── Logout button ──
+                Button:
+                    text: "⎋  Logout"
+                    font_size: dp(15)
+                    size_hint_y: None
+                    height: dp(52)
+                    background_normal: ""
+                    background_color: 0, 0, 0, 0
+                    color: app.theme_nav_active_text
+                    on_press: root.on_logout()
+                    canvas.before:
+                        Color:
+                            rgba: app.theme_surface
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(10)]
+                        Color:
+                            rgba: app.theme_accent
+                        Line:
+                            rounded_rectangle: [self.x, self.y, self.width, self.height, dp(10)]
+                            width: dp(1)
+
+                # Spacer for bottom nav
+                Widget:
+                    size_hint_y: None
+                    height: dp(16)
+
+        # ── Bottom nav bar ──
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            canvas.before:
+                Color:
+                    rgba: app.theme_surface
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: app.theme_border
+                Line:
+                    points: [self.x, self.top, self.right, self.top]
+                    width: dp(0.8)
+
+            Button:
+                text: "[font=mdi]\U000F056E[/font]\nDashboard"
+                markup: True
+                font_size: dp(10)
+                background_normal: ""
+                background_color: 0, 0, 0, 0
+                color: app.theme_nav_inactive_text
+                on_press: root.go_to_dashboard()
+
+            Button:
+                text: "[font=mdi]\U000F0279[/font]\nTasks"
+                markup: True
+                font_size: dp(10)
+                background_normal: ""
+                background_color: 0, 0, 0, 0
+                color: app.theme_nav_inactive_text
+                on_press: root.go_to_tasks()
+
+            Button:
+                text: "[font=mdi]\U000F0009[/font]\nProfile"
+                markup: True
+                font_size: dp(10)
+                background_normal: ""
+                background_color: app.theme_nav_active_bg
+                color: app.theme_nav_active_text
